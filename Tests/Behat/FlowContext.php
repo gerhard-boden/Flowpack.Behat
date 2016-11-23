@@ -16,7 +16,7 @@ use Behat\Behat\Exception\ErrorException;
 use Doctrine\Common\Persistence\ObjectManager as DoctrineObjectManager;
 use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use Flowpack\Behat\Tests\Functional\Aop\ConsoleLoggingCaptureAspect;
+///use Flowpack\Behat\Tests\Functional\Aop\ConsoleLoggingCaptureAspect;
 use Flowpack\Behat\Tests\Functional\Fixture\FixtureFactory;
 use TYPO3\Flow\Cli\RequestBuilder;
 use TYPO3\Flow\Cli\Response;
@@ -25,12 +25,12 @@ use TYPO3\Flow\Core\Bootstrap;
 use TYPO3\Flow\Configuration\ConfigurationManager;
 use TYPO3\Flow\Mvc\Dispatcher;
 use TYPO3\Flow\Mvc\Routing\Router;
-use TYPO3\Flow\Object\ObjectManagerInterface;
+use TYPO3\Flow\ObjectManagement\ObjectManagerInterface;
 use TYPO3\Flow\Persistence\Doctrine\Service;
 use TYPO3\Flow\Persistence\PersistenceManagerInterface;
 use TYPO3\Flow\Reflection\ReflectionService;
 use TYPO3\Flow\Security\Policy\PolicyService;
-use TYPO3\Flow\Security\Policy\RoleRepository;
+//use TYPO3\Flow\Security\Policy\RoleRepository;
 
 class FlowContext extends BehatContext {
 
@@ -100,32 +100,32 @@ class FlowContext extends BehatContext {
 			self::$bootstrap->shutdown('Runtime');
 		}
 	}
-
-	/**
-	 * @When /^(?:|I )run the command "([^"]*)"$/
-	 */
-	public function iRunTheCommand($command) {
-		$captureAspect = $this->objectManager->get(ConsoleLoggingCaptureAspect::class);
-		$captureAspect->reset();
-
-		$captureAspect->disableOutput();
-
-		try {
-			$request = $this->objectManager->get(RequestBuilder::class)->build($command);
-			$response = new Response();
-
-			$dispatcher = $this->objectManager->get(Dispatcher::class);
-			$dispatcher->dispatch($request, $response);
-
-			$this->lastCommandOutput = $captureAspect->getCapturedOutput();
-
-			$this->persistAll();
-
-			$captureAspect->enableOutput();
-		} catch(\Exception $e) {
-			$captureAspect->enableOutput();
-		}
-	}
+//
+//	/**
+//	 * @When /^(?:|I )run the command "([^"]*)"$/
+//	 */
+//	public function iRunTheCommand($command) {
+//		$captureAspect = $this->objectManager->get(ConsoleLoggingCaptureAspect::class);
+//		$captureAspect->reset();
+//
+//		$captureAspect->disableOutput();
+//
+//		try {
+//			$request = $this->objectManager->get(RequestBuilder::class)->build($command);
+//			$response = new Response();
+//
+//			$dispatcher = $this->objectManager->get(Dispatcher::class);
+//			$dispatcher->dispatch($request, $response);
+//
+//			$this->lastCommandOutput = $captureAspect->getCapturedOutput();
+//
+//			$this->persistAll();
+//
+//			$captureAspect->enableOutput();
+//		} catch(\Exception $e) {
+//			$captureAspect->enableOutput();
+//		}
+//	}
 
 	/**
 	 * @Then /^(?:|I )should see the command output "([^"]*)"$/
@@ -251,8 +251,8 @@ class FlowContext extends BehatContext {
 	protected function resetRolesAndPolicyService() {
 		$this->objectManager->get(PolicyService::class)->reset();
 
-		if ($this->objectManager->isRegistered(RoleRepository::class)) {
-			$roleRepository = $this->objectManager->get(RoleRepository::class);
+		if ($this->objectManager->isRegistered(\TYPO3\Flow\Security\Policy\RoleRepository)) {
+			$roleRepository = $this->objectManager->get(\TYPO3\Flow\Security\Policy\RoleRepository);
 			\TYPO3\Flow\Reflection\ObjectAccess::setProperty($roleRepository, 'newRoles', array(), TRUE);
 		}
 	}
